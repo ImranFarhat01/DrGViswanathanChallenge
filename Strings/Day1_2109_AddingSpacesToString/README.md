@@ -1,8 +1,10 @@
 # 2109. Adding Spaces to a String
 
-**Platform:** LeetCode
-**Difficulty:** Medium
-**Day:** 1
+🔗 [View on LeetCode](https://leetcode.com/problems/adding-spaces-to-a-string)
+
+- **Platform:** LeetCode
+- **Difficulty:** Medium
+- **Day:** 1
 
 ## Problem
 You're given a string `s` and an array `spaces` containing indices in the original string. A space must be inserted immediately before the character sitting at each of those indices, and the resulting string is returned.
