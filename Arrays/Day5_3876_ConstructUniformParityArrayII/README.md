@@ -7,56 +7,31 @@
 - **Day:** 5
 
 ## Problem
-You are given an array `nums1` of `n` distinct integers.
-
-You need to construct another array `nums2` of the same length such that all elements in `nums2` are either **all odd or all even**.
-
-For each index `i`, you can choose exactly one of the following:
-
-- `nums2[i] = nums1[i]`
-- `nums2[i] = nums1[i] - nums1[j]`, where `j != i` and `nums1[i] - nums1[j] >= 1`
-
-Return `true` if it is possible to construct such an array, otherwise return `false`.
+Given an array nums1 of n distinct integers, construct another array nums2 of length n such that all elements in nums2 are either all odd or all even. For each index i, either nums2[i] = nums1[i], or nums2[i] = nums1[i] - nums1[j] for some other index j, as long as the result is at least 1. Return true if such an array can be constructed, false otherwise.
 
 **Examples:**
-- `nums1 = [1,4,7]` → `true`
-- `nums1 = [2,3]` → `false`
-- `nums1 = [4,6]` → `true`
+- nums1 = [1,4,7] → true (nums2 = [1,3,7], all odd)
+- nums1 = [2,3] → false
+- nums1 = [4,6] → true (nums2 = [4,6], all even, no subtraction needed)
 
 **Constraints:**
-- `1 <= n == nums1.length <= 10^5`
-- `1 <= nums1[i] <= 10^9`
-- `nums1` consists of distinct integers
+- 1 <= n == nums1.length <= 10^5
+- 1 <= nums1[i] <= 10^9
+- nums1 consists of distinct integers
 
 ## Approach
-The key observation is based on **parity**.
+The key insight is parity math: subtracting two numbers of the same parity gives an even result, while subtracting two numbers of different parity gives an odd result.
 
-When subtracting two numbers:
+To make every element even: pick the smallest even number in the array as a "base," and for every odd number, subtract the smallest even number from it (odd - even = odd... actually the reverse: subtract an odd number from itself isn't needed, since same-parity elements can just be kept as-is, and different-parity elements need to become the same parity via subtraction).
 
-- Even - Odd = Odd
-- Odd - Even = Odd
-- Even - Even = Even
-- Odd - Odd = Even
-
-If there are no odd elements, then all elements are already even, so the answer is `true`.
-
-Otherwise, let `minOdd` be the smallest odd element and `minEven` be the smallest even element.
-
-For an even element to be converted into an odd value, we need to subtract a smaller odd element from it. The smallest odd element gives us the best possible chance of doing this.
-
-Therefore, all even elements can be converted into positive odd values if and only if:
-
-`minEven > minOdd`
-
-So, we only need one traversal of the array to find the minimum odd and even values.
+The simpler working rule: find the minimum odd value and the minimum even value in the array.
+- If there are no odd numbers at all, the array is already uniform (all even) → true.
+- Otherwise, check whether minEven > minOdd. If the smallest even number is larger than the smallest odd number, every even number can be converted to odd by subtracting the smallest odd number from it (even - odd = odd, and since minEven > minOdd, the result stays >= 1). This makes the whole array uniformly odd.
+- If minEven is not greater than minOdd, there's no valid way to unify parity, so return false.
 
 ## Complexity
-- **Time:** O(n) - single pass through the array
-- **Space:** O(1) - only two variables are used
+- **Time:** O(n) - single pass to find the minimum odd and minimum even values
+- **Space:** O(1) - only two tracking variables used
 
 ## Key Learning
-The main insight is that we do not need to actually construct `nums2` or try different choices of `j`.
-
-By focusing on **parity** and tracking the smallest odd and even values, the problem can be reduced to a simple condition: `minEven > minOdd`.
-
-This is a good example of how identifying a mathematical property can turn a seemingly complicated construction problem into a simple one-pass solution.
+Parity problems often reduce to a simple property: subtracting a number of one parity from a number of the other parity always flips the result to odd, while same-parity subtraction always gives even. Once framed this way, the problem becomes about finding the right "anchor" values (the minimums) rather than simulating actual subtractions across the array.
