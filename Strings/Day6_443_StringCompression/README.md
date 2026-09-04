@@ -1,62 +1,89 @@
-\# 443. String Compression
+# 443. String Compression
 
+🔗 [View on LeetCode](https://leetcode.com/problems/string-compression/)
 
+- **Platform:** LeetCode
+- **Difficulty:** Medium
+- **Day:** 6
 
-🔗 \[View on LeetCode](https://leetcode.com/problems/string-compression/)
+## Problem
 
+Given an array of characters `chars`, compress it in place:
 
+- For each group of consecutive repeating characters, write the character.
+- If the group length is greater than `1`, append the group's length.
+- If the group length is `1`, write only the character.
+- Group lengths of `10` or more are represented using multiple digits.
+- Return the new length of the compressed array.
+- The compression must be done **in-place**.
 
-\- \*\*Platform:\*\* LeetCode
+### Examples
 
-\- \*\*Difficulty:\*\* Medium
+**Example 1:**
 
-\- \*\*Day:\*\* 6
+    Input:  chars = ["a","a","b","b","c","c","c"]
+    Output: 6
+    chars becomes ["a","2","b","2","c","3"]
 
+**Example 2:**
 
+    Input:  chars = ["a"]
+    Output: 1
+    chars remains ["a"]
 
-\## Problem
+**Example 3:**
 
-Given an array of characters chars, compress it in place: for each group of consecutive repeating characters, append the character followed by the group's length if the group has more than one character, or just the character alone if the group's length is 1. Group lengths of 10 or more get split across multiple characters. Return the new length of the array after compression. Must use only constant extra space.
+    Input:  chars = ["a","b","b","b","b","b","b","b","b","b","b","b","b"]
+    Output: 4
+    chars becomes ["a","b","1","2"]
 
+## Constraints
 
+- `1 <= chars.length <= 2000`
+- `chars[i]` is a lowercase English letter, uppercase English letter, digit, or symbol.
 
-\*\*Examples:\*\*
+## Approach
 
-\- chars = \["a","a","b","b","c","c","c"] → 6, chars becomes \["a","2","b","2","c","3"]
+Walk through `chars` once and count how many times each character repeats consecutively.
 
-\- chars = \["a"] → 1, chars stays \["a"]
+Whenever a different character is encountered:
 
-\- chars = \["a","b","b",...,"b"] (12 b's) → 4, chars becomes \["a","b","1","2"]
+1. Write the previous character to the result.
+2. If its count is greater than `1`, write the count as digits.
+3. Move to the next group.
 
+After the loop ends, handle the **final group separately**, because there is no next character to trigger the group-processing condition.
 
+In this implementation, a separate result string is used to store the compressed result. Finally, copy the compressed result back into the original `chars` array.
 
-\*\*Constraints:\*\*
+> **Important:** A count of `1` should **not** be written. For example, `"a"` remains `"a"`, not `"a1"`.
 
-\- 1 <= chars.length <= 2000
+## Complexity
 
-\- chars\[i] is a lowercase English letter, uppercase English letter, digit, or symbol
+- **Time:** `O(n)`
+  - One pass to process the groups.
+  - One additional pass to copy the compressed result back into `chars`.
+- **Space:** `O(n)`
+  - The intermediate result string can contain up to `n` characters.
 
+> **Note:** The problem officially requires `O(1)` extra space. Therefore, using a separate result string does **not** satisfy the strict in-place requirement. An optimal solution should write directly into `chars` using read/write pointers.
 
+## Key Learning
 
-\## Approach
+The trickiest part is handling the **last group**.
 
-Walk through chars once, counting how many times each character repeats consecutively. Whenever a different character is encountered, write the previous character to a result string, followed by its count only if the count is greater than 1 (a count of 1 gets appended as digits automatically, which is wrong per the problem's rules). After the loop ends, handle the final group separately since the loop only writes a group when it detects a change to the next character.
+The loop processes a group when it detects that the **next character is different**. But for the final group, there is no next character, so that condition never occurs.
 
+Therefore, the final group must be processed **after the loop**.
 
+### Main Idea
 
-Once the compressed result is built as a separate string, copy it back into the original chars array, overwriting the first ans.length() positions. The returned length tells the caller how many of those positions are meaningful.
-
-
-
-\## Complexity
-
-\- \*\*Time:\*\* O(n) - single pass to count groups, plus a copy-back pass of at most n characters
-
-\- \*\*Space:\*\* O(n) for the intermediate result string in this implementation - though the compressed result is always the same size or smaller than the input, so the string never exceeds O(n) even though the problem statement asks for O(1) extra space, which would require writing directly into chars using two pointers instead of a separate buffer
-
-
-
-\## Key Learning
-
-The trickiest part isn't the compression logic itself, it's handling the last group. Since the loop only writes a completed group when it detects the \*next\* character is different, the very last group in the array never triggers that condition and has to be written manually after the loop ends.
-
+    Count consecutive characters
+            ↓
+    Character changes?
+            ↓
+    Write character + count (if count > 1)
+            ↓
+    Process final group
+            ↓
+    Return compressed length
