@@ -60,3 +60,5 @@ The special case is goal == 0. Since atMost(-1) isn't meaningful (a subarray sum
 
 The atMost(k) - atMost(k-1) trick has an edge case at k = 0, since atMost(-1) should conceptually be 0 but isn't safe to compute directly if the helper function wasn't written to handle negative goals. Recognizing and special-casing the boundary of a reusable pattern, rather than assuming it generalizes perfectly to every edge, is what separates a working solution from one that silently breaks on edge cases like an all-zero array with goal = 0.
 
+
+
