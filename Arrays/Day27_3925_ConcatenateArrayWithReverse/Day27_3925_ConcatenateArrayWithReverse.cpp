@@ -1,0 +1,16 @@
+class Solution {
+public:
+    vector<int> concatWithReverse(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> ans(2 * n);
+        for (int i = 0; i < n; i++) {
+            ans[i] = nums[i];
+        }
+        int j = nums.size();
+        for (int i = n - 1; i >= 0; i--) {
+            ans[j] = nums[i];
+            j++;
+        }
+        return ans;
+    }
+};
